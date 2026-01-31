@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { Header } from './Header';
 import { CartDrawer } from './CartDrawer';
+import { EventNotification } from '../notifications';
 
 export function MainLayout() {
   return (
@@ -10,6 +11,7 @@ export function MainLayout() {
         <Outlet />
       </main>
       <CartDrawer />
+      <EventNotification />
     </div>
   );
 }

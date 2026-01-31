@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, ShoppingCart, User, Menu, Upload, LogOut, Settings, Package, BookOpen } from 'lucide-react';
+import { Search, ShoppingCart, User, Menu, Upload, LogOut, Settings, Package, BookOpen, Trophy, Mail, Shield } from 'lucide-react';
 import { useAuthStore, useCartStore } from '@/store';
 import { PointBadge } from './PointBadge';
 import { NotificationDropdown } from './NotificationDropdown';
@@ -171,6 +171,34 @@ export function Header({ onMenuClick, onSearchSubmit }: HeaderProps) {
                             <Settings className="w-4 h-4 text-gray-400" />
                             설정
                           </Link>
+                        </div>
+                        <div className="border-t border-gray-100 py-1">
+                          <Link
+                            to="/events"
+                            onClick={() => setShowUserMenu(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          >
+                            <Trophy className="w-4 h-4 text-gray-400" />
+                            이벤트
+                          </Link>
+                          <Link
+                            to="/inbox"
+                            onClick={() => setShowUserMenu(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          >
+                            <Mail className="w-4 h-4 text-gray-400" />
+                            쪽지함
+                          </Link>
+                          {user?.email === 'skypeople41@gmail.com' && (
+                            <Link
+                              to="/admin"
+                              onClick={() => setShowUserMenu(false)}
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-primary-600 hover:bg-primary-50 transition-colors"
+                            >
+                              <Shield className="w-4 h-4" />
+                              관리자
+                            </Link>
+                          )}
                         </div>
                         <div className="border-t border-gray-100 py-1">
                           <button

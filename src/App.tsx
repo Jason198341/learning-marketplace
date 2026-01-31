@@ -12,6 +12,9 @@ const HomePage = lazy(() => import('@/pages/HomePage'));
 const WorksheetDetailPage = lazy(() => import('@/pages/WorksheetDetailPage'));
 const UploadPage = lazy(() => import('@/pages/UploadPage'));
 const MyPage = lazy(() => import('@/pages/MyPage'));
+const AdminPage = lazy(() => import('@/pages/AdminPage'));
+const InboxPage = lazy(() => import('@/pages/InboxPage'));
+const EventsPage = lazy(() => import('@/pages/EventsPage'));
 
 function PageLoader() {
   return (
@@ -90,6 +93,14 @@ function App() {
                 </Suspense>
               }
             />
+            <Route
+              path="/events"
+              element={
+                <Suspense fallback={<PageLoader />}>
+                  <EventsPage />
+                </Suspense>
+              }
+            />
 
             {/* Protected routes */}
             <Route
@@ -108,6 +119,26 @@ function App() {
                 <ProtectedRoute>
                   <Suspense fallback={<PageLoader />}>
                     <MyPage />
+                  </Suspense>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <Suspense fallback={<PageLoader />}>
+                    <AdminPage />
+                  </Suspense>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/inbox"
+              element={
+                <ProtectedRoute>
+                  <Suspense fallback={<PageLoader />}>
+                    <InboxPage />
                   </Suspense>
                 </ProtectedRoute>
               }

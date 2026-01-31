@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Filter, ChevronDown, ShoppingCart, Star, Loader2, Sparkles, BookOpen } from 'lucide-react';
 import { Button, Badge, Select, Skeleton } from '@/components/common';
+import { DailyRewards } from '@/components/daily';
 import { useCartStore, useAuthStore } from '@/store';
 import { useToast } from '@/components/common/Toast';
 import { api, ApiError } from '@/services/api';
@@ -407,7 +408,8 @@ export function HomePage() {
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Filter Sidebar */}
-          <aside className="lg:w-64 shrink-0">
+          <aside className="lg:w-64 shrink-0 space-y-4">
+            <DailyRewards />
             <FilterPanel filters={filters} onFilterChange={setFilters} />
           </aside>
 

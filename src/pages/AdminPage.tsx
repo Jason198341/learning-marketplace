@@ -83,6 +83,11 @@ export function AdminPage() {
     maxParticipants: 100,
     startAt: '',
     endAt: '',
+    // Comment event specific
+    reviewCriteria: '',
+    minLength: 20,
+    minPoints: 10,
+    maxPoints: 50,
   });
 
   // Messages state
@@ -182,15 +187,25 @@ export function AdminPage() {
       return;
     }
 
+    if (eventForm.type === 'comment' && !eventForm.reviewCriteria) {
+      toast.error('댓글 이벤트는 심사 기준을 입력해주세요.');
+      return;
+    }
+
     try {
       await api.admin.createEvent({
         title: eventForm.title,
-        description: eventForm.description,
+        description: eventForm.type === 'comment'
+          ? `${eventForm.description}\n\n📋 심사 기준: ${eventForm.reviewCriteria}`
+          : eventForm.description,
         type: eventForm.type,
         pointsReward: eventForm.pointsReward,
         maxParticipants: eventForm.type === 'first_come' ? eventForm.maxParticipants : undefined,
         startAt: eventForm.startAt,
         endAt: eventForm.endAt,
+        minLength: eventForm.type === 'comment' ? eventForm.minLength : undefined,
+        minPoints: eventForm.type === 'comment' ? eventForm.minPoints : undefined,
+        maxPoints: eventForm.type === 'comment' ? eventForm.maxPoints : undefined,
       });
 
       toast.success('이벤트가 생성되었습니다.');
@@ -203,6 +218,10 @@ export function AdminPage() {
         maxParticipants: 100,
         startAt: '',
         endAt: '',
+        reviewCriteria: '',
+        minLength: 20,
+        minPoints: 10,
+        maxPoints: 50,
       });
 
       // Refresh events
@@ -474,6 +493,67 @@ export function AdminPage() {
                           />
                         </div>
                       </div>
+
+                      {/* Comment Event Specific Fields */}
+                      {eventForm.type === 'comment' && (
+                        <>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              심사 기준 *
+                            </label>
+                            <textarea
+                              value={eventForm.reviewCriteria}
+                              onChange={(e) =>
+                                setEventForm({ ...eventForm, reviewCriteria: e.target.value })
+                              }
+                              rows={3}
+                              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                              placeholder="예: 주제와의 관련성, 창의적인 표현, 성의있는 내용 등"
+                            />
+                          </div>
+                          <div className="grid grid-cols-3 gap-4">
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                최소 글자수
+                              </label>
+                              <input
+                                type="number"
+                                value={eventForm.minLength}
+                                onChange={(e) =>
+                                  setEventForm({ ...eventForm, minLength: Number(e.target.value) })
+                                }
+                                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                최소 포인트
+                              </label>
+                              <input
+                                type="number"
+                                value={eventForm.minPoints}
+                                onChange={(e) =>
+                                  setEventForm({ ...eventForm, minPoints: Number(e.target.value) })
+                                }
+                                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                최대 포인트
+                              </label>
+                              <input
+                                type="number"
+                                value={eventForm.maxPoints}
+                                onChange={(e) =>
+                                  setEventForm({ ...eventForm, maxPoints: Number(e.target.value) })
+                                }
+                                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                              />
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
 
                     <div className="flex gap-3 mt-6">

@@ -14,8 +14,10 @@ import {
   Clock,
   CheckCircle,
   ChevronDown,
+  Sparkles,
 } from 'lucide-react';
 import { Button, Badge } from '@/components/common';
+import { QuizGenerator } from '@/components/admin';
 import { useToast } from '@/components/common/Toast';
 import { useAuthStore } from '@/store';
 import { api, ApiError } from '@/services/api';
@@ -98,6 +100,10 @@ export function AdminPage() {
 
   // Inquiries state
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+
+  // Quiz generator state
+  const [showQuizGenerator, setShowQuizGenerator] = useState(false);
+  const [selectedQuizEventId, setSelectedQuizEventId] = useState<string>('');
 
   // Check admin status
   useEffect(() => {
@@ -541,6 +547,19 @@ export function AdminPage() {
                       </div>
 
                       <div className="flex gap-2">
+                        {event.type === 'quiz' && (event.status === 'draft' || event.status === 'scheduled') && (
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            onClick={() => {
+                              setSelectedQuizEventId(event.id);
+                              setShowQuizGenerator(true);
+                            }}
+                          >
+                            <Sparkles className="w-3 h-3 mr-1" />
+                            문제 생성
+                          </Button>
+                        )}
                         {(event.status === 'draft' || event.status === 'scheduled') && (
                           <Button
                             size="sm"
@@ -564,6 +583,22 @@ export function AdminPage() {
                   ))
                 )}
               </div>
+
+              {/* Quiz Generator Modal */}
+              {showQuizGenerator && selectedQuizEventId && (
+                <QuizGenerator
+                  eventId={selectedQuizEventId}
+                  onComplete={() => {
+                    setShowQuizGenerator(false);
+                    setSelectedQuizEventId('');
+                    toast.success('퀴즈가 이벤트에 추가되었습니다.');
+                  }}
+                  onClose={() => {
+                    setShowQuizGenerator(false);
+                    setSelectedQuizEventId('');
+                  }}
+                />
+              )}
             </div>
           )}
 
